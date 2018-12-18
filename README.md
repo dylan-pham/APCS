@@ -1,2 +1,2 @@
 # APCS
-AP Computer Science
+some projects from my AP Computer Science class
