@@ -102,7 +102,7 @@ public class Target {
     }
 
     public boolean reachOtherSide() {
-        if ( x == 0 ) {
+        if ( x <= 0 ) {
             return true;
         } else {
             return false;

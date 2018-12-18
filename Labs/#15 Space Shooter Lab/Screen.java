@@ -28,8 +28,10 @@ public class Screen extends JPanel implements KeyListener {
     private Life[] lives;
     private int livesLost = 0;
     private BufferedImage winner;
-    private int visibleTargets;
+    private int visibleTargets1;
+    private int visibleTargets2;
     private boolean endGame = false;
+    private String currentScore;
 
     public Screen() {
         addKeyListener(this);
@@ -152,13 +154,13 @@ public class Screen extends JPanel implements KeyListener {
 
             if ( level == 1 ) {
                 level1BG.move();
-                visibleTargets = 0;
+                visibleTargets1 = 0;
                 for ( int i = 0; i < targets.length; i++ ) {
                     targets[i].checkCollision(projectile);
                     targets[i].move();
 
                     if ( targets[i].checkVisible() == true ) {  // checking if target is still alive
-                        visibleTargets += 1;
+                        visibleTargets1 += 1;
 
                         if ( targets[i].reachOtherSide() == true ) {
                             if ( livesLost < lives.length ) {   // making sure index doesn't go out of bound
@@ -184,40 +186,51 @@ public class Screen extends JPanel implements KeyListener {
                     stars[i].move();
                 }
 
-                if ( visibleTargets <= 3 ) {
-                    String currentScore = "" + (3 - visibleTargets);
+                if ( visibleTargets1 <= 3 ) {
+                    String currentScore = "" + (3 - visibleTargets1);
                     score.setText(currentScore + " points   |   Level " + level);
 
                 }
 
-                if ( visibleTargets == 0 ) {
+                if ( visibleTargets1 == 0 ) {
                     level = 2;
                 }
 
                 if ( livesLost == 3 ) {
+                    level = 1;
                     livesLost = 0;
-                    visibleTargets = 0;
+                    visibleTargets1 = 0;
+                    visibleTargets2 = 0;
                     level1BG.resetPosition();
                     level2BG.resetPosition();
+                    currentScore = "" + 0;
 
                     for ( int i = 0; i < targets.length; i++ ) {
                         targets[i].setVisible(true);
+                        targets[i].resetPosition();
+                    }
+
+                    for ( int i = 0; i < targets2.length; i++ ) {
+                        targets2[i].setVisible(true);
+                        targets2[i].resetPosition();
                     }
 
                     for ( int i = 0; i < lives.length; i++ ) {
                         lives[i].setVisible(true);
                     }
+
+                    score.setText(currentScore + " points   |   Level " + level);
                 }
 
             } else if ( level == 2 ) {
                 level2BG.move();
-                visibleTargets = 0;
+                visibleTargets2 = 0;
                 for ( int i = 0; i < targets2.length; i++ ) {
                     targets2[i].checkCollision(projectile);
                     targets2[i].move2();
 
                     if ( targets2[i].checkVisible() == true ) {
-                        visibleTargets += 1;
+                        visibleTargets2 += 1;
 
                          if ( targets2[i].reachOtherSide() == true ) {
                             if ( livesLost < lives.length ) {   // making sure index doesn't go out of bound
@@ -243,24 +256,32 @@ public class Screen extends JPanel implements KeyListener {
                     stars[i].move();
                 }
 
-                if ( visibleTargets == 0 ) {
+                if ( visibleTargets2 == 0 ) {
                     endGame = true;
                 }
 
-                if ( visibleTargets <= 5 ) {
-                    String currentScore = "" + (5 - visibleTargets);
+                if ( visibleTargets2 <= 5 ) {
+                    currentScore = "" + (5 - visibleTargets2);
                     score.setText(currentScore + " points   |   Level " + level);
                 }
 
                 if ( livesLost == 3 ) {
                     level = 1;
                     livesLost = 0;
-                    visibleTargets = 0;
+                    visibleTargets1 = 0;
+                    visibleTargets2 = 0;
                     level1BG.resetPosition();
                     level2BG.resetPosition();
+                    currentScore = "0";
 
                     for ( int i = 0; i < targets.length; i++ ) {
                         targets[i].setVisible(true);
+                        targets[i].resetPosition();
+                    }
+
+                    for ( int i = 0; i < targets2.length; i++ ) {
+                        targets2[i].setVisible(true);
+                        targets2[i].resetPosition();
                     }
 
                     for ( int i = 0; i < lives.length; i++ ) {
