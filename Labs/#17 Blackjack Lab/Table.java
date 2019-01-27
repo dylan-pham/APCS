@@ -118,7 +118,7 @@ public class Table extends JPanel implements ActionListener {
         this.add(messageJLabel);
 
         loseAnimation = new ImageIcon("images/loser.gif");
-        winAnimation = new ImageIcon("images/winner2.gif");
+        winAnimation = new ImageIcon("images/winner.gif");
         
         loseAnimationLabel = new JLabel(loseAnimation);
         loseAnimationLabel.setBounds(500, 150, 500, 500);
