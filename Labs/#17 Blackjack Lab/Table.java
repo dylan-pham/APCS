@@ -180,6 +180,7 @@ public class Table extends JPanel implements ActionListener {
         // setting ace value to ideal value for player
         while (total > 21 && aceCounter > 0) {
             total -= 10;
+            aceCounter--;
         }
 
         totalLabel.setText("Total: " + total);
