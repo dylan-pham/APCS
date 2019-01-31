@@ -14,7 +14,7 @@ public class Table extends JPanel implements ActionListener {
     private int playerIndex;
     private int total;
     private int points;
-    boolean isEndGame;
+    private boolean isEndGame;
     private JButton hitButton;
     private JButton standButton;
     private JButton newGameButton;
