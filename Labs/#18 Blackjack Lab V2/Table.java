@@ -250,8 +250,8 @@ public class Table extends JPanel implements ActionListener {
             aceCounter--;
         }
 
-        playerTotalLabel.setText("Total: " + playerTotal);
-        dealerTotalLabel.setText("Total: " + dealerTotal);
+        playerTotalLabel.setText("Player total: " + playerTotal);
+        dealerTotalLabel.setText("Dealer total: " + dealerTotal);
         repaint();
     }
 
@@ -306,9 +306,10 @@ public class Table extends JPanel implements ActionListener {
             if (playerTotal <= 21) {
                 isDealerTurn = true;
             } else if (playerTotal > 21) {
-                messageJLabel.setText("You lose");
                 dealerWins += 1;
                 loseAnimationLabel.setVisible(true);
+                messageJLabel.setText("You lose");
+                dealerWinsJLabel.setText("Dealer Wins: " + dealerWins);
             }
         }
     }
