@@ -1,0 +1,1 @@
+aces can be 1 or 11; whichever one is to player and dealer advantage
