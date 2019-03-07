@@ -11,15 +11,19 @@ import java.awt.event.ActionListener;
 import java.net.URL;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
+import javax.swing.JTextArea;
 
 public class Screen extends JPanel implements MouseListener, ActionListener {
     Game game;
     private int playerXWins;
     private int playerOWins;
-    private JButton newGameButton;
+    private JButton twoPlayerButton;
+    private JButton onePlayerButton;
     private JLabel playerXWinsLabel;
     private JLabel playerOWinsLabel;
     private boolean endGame;
+    private int mode;
+    private JTextArea winnerTextArea;
 
     public Screen() {
         setLayout(null);
@@ -29,10 +33,15 @@ public class Screen extends JPanel implements MouseListener, ActionListener {
         playerXWins = 0;
         playerOWins = 0;
 
-        newGameButton = new JButton("New Game");
-        newGameButton.setBounds(800, 100, 100, 30);
-        newGameButton.addActionListener(this);
-        this.add(newGameButton);
+        twoPlayerButton = new JButton("2 Player");
+        twoPlayerButton.setBounds(740, 100, 100, 30);
+        twoPlayerButton.addActionListener(this);
+        this.add(twoPlayerButton);
+
+        onePlayerButton = new JButton("1 Player");
+        onePlayerButton.setBounds(860, 100, 100, 30);
+        onePlayerButton.addActionListener(this);
+        this.add(onePlayerButton);
 
         playerXWinsLabel = new JLabel("Player X Wins: " + playerXWins);
         playerXWinsLabel.setBounds(800, 150, 110, 30);
@@ -44,6 +53,10 @@ public class Screen extends JPanel implements MouseListener, ActionListener {
 
         endGame = true;
 
+        winnerTextArea = new JTextArea("Select Mode");
+        winnerTextArea.setBounds(300, 750, 200, 30);
+        this.add(winnerTextArea);
+
         addMouseListener(this);
     }
 
@@ -53,14 +66,18 @@ public class Screen extends JPanel implements MouseListener, ActionListener {
 
     private void initializeGame() {
         endGame = false;
-        newGameButton.setVisible(false);
+        twoPlayerButton.setVisible(false);
+        onePlayerButton.setVisible(false);
+        winnerTextArea.setVisible(false);
         game.reset();
         repaint();
     }
     
     private void endGame() {
         endGame = true;
-        newGameButton.setVisible(true);        
+        twoPlayerButton.setVisible(true);        
+        onePlayerButton.setVisible(true);
+        winnerTextArea.setVisible(true);
     }
 
     private void checkEndGameConditions(int winner) {
@@ -68,12 +85,15 @@ public class Screen extends JPanel implements MouseListener, ActionListener {
             playerXWins++;
             playerXWinsLabel.setText("Player X Wins: " + playerXWins);
             playWinSound();
+            winnerTextArea.setText("Player X Wins!");
         } else if (winner == 2) {
             playerOWins++;
             playerOWinsLabel.setText("Player O Wins: " + playerOWins);
             playWinSound();
+            winnerTextArea.setText("Player O Wins!");
         } else {
             playTieSound();
+            winnerTextArea.setText("Tie.");
         }
     }
     
@@ -96,52 +116,138 @@ public class Screen extends JPanel implements MouseListener, ActionListener {
         }
     }
 
+    public void blockPlayer() {
+        if (game.getSpot(0, 0) == 1 && game.getSpot(0, 1) == 1 && game.getSpot(0, 2) == 0) {
+            game.insertXO(0, 2);
+        } else if (game.getSpot(0, 1) == 1 && game.getSpot(0, 2) == 1 && game.getSpot(0, 0) == 0) {
+            game.insertXO(0, 0);
+        } else if (game.getSpot(1, 0) == 1 && game.getSpot(1, 1) == 1 && game.getSpot(1, 2) == 0) {
+            game.insertXO(1, 2);
+        } else if (game.getSpot(1, 1) == 1 && game.getSpot(1, 2) == 1 && game.getSpot(1, 0) == 0) {
+            game.insertXO(1, 0);
+        } else if (game.getSpot(2, 0) == 1 && game.getSpot(2, 1) == 1 && game.getSpot(2, 2) == 0) {
+            game.insertXO(2, 2);
+        } else if (game.getSpot(2, 1) == 1 && game.getSpot(2, 2) == 1 && game.getSpot(2, 0) == 0) {
+            game.insertXO(2, 0);
+        } else if (game.getSpot(0, 0) == 1 && game.getSpot(1, 0) == 1 && game.getSpot(2, 0) == 0) {
+            game.insertXO(2, 0);
+        } else if (game.getSpot(1, 0) == 1 && game.getSpot(2, 0) == 1 && game.getSpot(0, 0) == 0) {
+            game.insertXO(0, 0);
+        } else if (game.getSpot(0, 1) == 1 && game.getSpot(1, 1) == 1 && game.getSpot(2, 1) == 0) {
+            game.insertXO(2, 1);
+        } else if (game.getSpot(2, 1) == 1 && game.getSpot(1, 1) == 1 && game.getSpot(0, 1) == 0) {
+            game.insertXO(0, 1);
+        } else if (game.getSpot(0, 2) == 1 && game.getSpot(1, 2) == 1 && game.getSpot(2, 2) == 0) {
+            game.insertXO(2, 2);
+        } else if (game.getSpot(2, 2) == 1 && game.getSpot(1, 2) == 1 && game.getSpot(0, 2) == 0) {
+            game.insertXO(0, 2);
+        } else if (game.getSpot(0, 0) == 1 && game.getSpot(1, 1) == 1 && game.getSpot(2, 2) == 0) {
+            game.insertXO(2, 2);
+        } else if (game.getSpot(1, 1) == 1 && game.getSpot(2, 2) == 1 && game.getSpot(0, 0) == 0) {
+            game.insertXO(0, 0);
+        } else if (game.getSpot(0, 2) == 1 && game.getSpot(1, 1) == 1 && game.getSpot(2, 0) == 0) {
+            game.insertXO(2, 0);
+        } else if (game.getSpot(2, 0) == 1 && game.getSpot(1, 1) == 1 && game.getSpot(0, 2) == 0) {
+            game.insertXO(0, 2);
+        } else {
+            if ((game.checkTicTacToe() != 0 || game.checkFull() == true) && !endGame) {
+                checkEndGameConditions(game.checkTicTacToe());
+                endGame();
+            }
+
+            int row = (int)(Math.random() * 3);
+            int column = (int)(Math.random() * 3);
+
+            while (game.getSpot(row, column) != 0 && !endGame) {
+                row = (int)(Math.random() * 3);
+                column = (int)(Math.random() * 3);
+                System.out.println("stuck");
+            }
+
+            game.insertXO(row, column);
+        }
+    }
+
     public void mousePressed(MouseEvent e) {
         // x's and o's can only be placed during game
         if (!endGame) {
-            if (e.getX() >= 100 && e.getX() <= 300 && e.getY() >= 100 && e.getY() <= 300) {
-                game.insertXO(0, 0);
-                playPlacingMarkerSound();
-            }
+            if (mode == 2) {
+                if (e.getX() >= 100 && e.getX() <= 300 && e.getY() >= 100 && e.getY() <= 300) {
+                    game.insertXO(0, 0);
+                }
 
-            if (e.getX() >= 301 && e.getX() <= 500 && e.getY() >= 100 && e.getY() <= 300) {
-                game.insertXO(0, 1);
-                playPlacingMarkerSound();
-            }
+                if (e.getX() >= 301 && e.getX() <= 500 && e.getY() >= 100 && e.getY() <= 300) {
+                    game.insertXO(0, 1);
+                }
 
-            if (e.getX() >= 501 && e.getX() <= 700 && e.getY() >= 100 && e.getY() <= 300) {
-                game.insertXO(0, 2);
-                playPlacingMarkerSound();
-            }
+                if (e.getX() >= 501 && e.getX() <= 700 && e.getY() >= 100 && e.getY() <= 300) {
+                    game.insertXO(0, 2);
+                }
 
-            if (e.getX() >= 100 && e.getX() <= 300 && e.getY() >= 301 && e.getY() <= 500) {
-                game.insertXO(1, 0);
-                playPlacingMarkerSound();
-            }
+                if (e.getX() >= 100 && e.getX() <= 300 && e.getY() >= 301 && e.getY() <= 500) {
+                    game.insertXO(1, 0);
+                }
 
-            if (e.getX() >= 301 && e.getX() <= 500 && e.getY() >= 301 && e.getY() <= 500) {
-                game.insertXO(1, 1);
-                playPlacingMarkerSound();
-            }
+                if (e.getX() >= 301 && e.getX() <= 500 && e.getY() >= 301 && e.getY() <= 500) {
+                    game.insertXO(1, 1);
+                }
 
-            if (e.getX() >= 501 && e.getX() <= 700 && e.getY() >= 301 && e.getY() <= 500) {
-                game.insertXO(1, 2);
-                playPlacingMarkerSound();
-            }
+                if (e.getX() >= 501 && e.getX() <= 700 && e.getY() >= 301 && e.getY() <= 500) {
+                    game.insertXO(1, 2);
+                }
 
-            if (e.getX() >= 100 && e.getX() <= 300 && e.getY() >= 501 && e.getY() <= 700) {
-                game.insertXO(2, 0);
-                playPlacingMarkerSound();
-            }
+                if (e.getX() >= 100 && e.getX() <= 300 && e.getY() >= 501 && e.getY() <= 700) {
+                    game.insertXO(2, 0);
+                }
 
-            if (e.getX() >= 301 && e.getX() <= 500 && e.getY() >= 501 && e.getY() <= 700) {
-                game.insertXO(2, 1);
-                playPlacingMarkerSound();
-            }
+                if (e.getX() >= 301 && e.getX() <= 500 && e.getY() >= 501 && e.getY() <= 700) {
+                    game.insertXO(2, 1);
+                }
 
-            if (e.getX() >= 501 && e.getX() <= 700 && e.getY() >= 501 && e.getY() <= 700) {
-                game.insertXO(2, 2);
+                if (e.getX() >= 501 && e.getX() <= 700 && e.getY() >= 501 && e.getY() <= 700) {
+                    game.insertXO(2, 2);
+                }
+
                 playPlacingMarkerSound();
+            } else {
+                if (e.getX() >= 100 && e.getX() <= 300 && e.getY() >= 100 && e.getY() <= 300) {
+                    game.insertXO(0, 0);
+                }
+
+                if (e.getX() >= 301 && e.getX() <= 500 && e.getY() >= 100 && e.getY() <= 300) {
+                    game.insertXO(0, 1);
+                }
+
+                if (e.getX() >= 501 && e.getX() <= 700 && e.getY() >= 100 && e.getY() <= 300) {
+                    game.insertXO(0, 2);
+                }
+
+                if (e.getX() >= 100 && e.getX() <= 300 && e.getY() >= 301 && e.getY() <= 500) {
+                    game.insertXO(1, 0);
+                }
+
+                if (e.getX() >= 301 && e.getX() <= 500 && e.getY() >= 301 && e.getY() <= 500) {
+                    game.insertXO(1, 1);
+                }
+
+                if (e.getX() >= 501 && e.getX() <= 700 && e.getY() >= 301 && e.getY() <= 500) {
+                    game.insertXO(1, 2);
+                }
+
+                if (e.getX() >= 100 && e.getX() <= 300 && e.getY() >= 501 && e.getY() <= 700) {
+                    game.insertXO(2, 0);
+                }
+
+                if (e.getX() >= 301 && e.getX() <= 500 && e.getY() >= 501 && e.getY() <= 700) {
+                    game.insertXO(2, 1);
+                }
+
+                if (e.getX() >= 501 && e.getX() <= 700 && e.getY() >= 501 && e.getY() <= 700) {
+                    game.insertXO(2, 2);
+                }
+
+                playPlacingMarkerSound();
+                blockPlayer();
             }
         }
  
@@ -157,7 +263,13 @@ public class Screen extends JPanel implements MouseListener, ActionListener {
     public void mouseClicked(MouseEvent e) {}
 
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == newGameButton) {
+        if (e.getSource() == twoPlayerButton) {
+            mode = 2;
+            initializeGame();
+        }
+
+        if (e.getSource() == onePlayerButton) {
+            mode = 1;
             initializeGame();
         }
     }

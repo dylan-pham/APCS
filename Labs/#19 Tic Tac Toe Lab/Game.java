@@ -1,5 +1,4 @@
 import java.awt.Graphics;
-import javax.swing.JLabel;
 
 public class Game {
     private int[][] board;
@@ -127,6 +126,16 @@ public class Game {
 
     public int getTurn() {
         return turn;
+    }
+
+    public int getSpot(int row, int column) {
+        if (board[row][column] == 1) {
+            return 1;
+        } else if (board[row][column] == 2) {
+            return 2;
+        } else {
+            return 0;
+        }
     }
 
     public void drawMe(Graphics g) {
