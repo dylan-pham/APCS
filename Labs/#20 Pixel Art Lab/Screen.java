@@ -8,14 +8,20 @@ import java.awt.event.MouseEvent;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import javax.imageio.ImageIO;
  
 public class Screen extends JPanel implements MouseListener, ActionListener {
     private Square[][] grid;
     private ColorPalette[][] selector;
     private JButton clearButton;
+    private JButton saveButton;
     private int red;
     private int green;
     private int blue;
+    private BufferedImage image;
 
     public Screen() {
         setLayout(null);
@@ -39,6 +45,11 @@ public class Screen extends JPanel implements MouseListener, ActionListener {
         clearButton.setBounds(700, 10, 90, 30);
         clearButton.addActionListener(this);
         this.add(clearButton);
+
+        saveButton = new JButton("Save");
+        saveButton.setBounds(600, 10, 90, 30);
+        saveButton.addActionListener(this);
+        this.add(saveButton);
 
         red = 0;
         green = 255;
@@ -71,6 +82,38 @@ public class Screen extends JPanel implements MouseListener, ActionListener {
         for (int r = 0; r < selector.length; r++) {
             selector[r][0].drawMe(g, x, y);
             y += 20;
+        }
+    }
+
+    public void saveImage() {
+            //create an image that is 200 by 200
+        if (image == null) {
+            image = (BufferedImage)(createImage(160, 160));
+        }
+
+            //Create a graphics object that draws on the image
+        Graphics gImage = image.createGraphics();
+
+        int x = 0;
+        int y = 0;
+
+        for (int r = 0; r < grid.length; r++) {
+            for (int c = 0; c < grid[r].length; c++) {
+                grid[r][c].drawMe(gImage, x, y);
+                x += 20;
+            }
+            x = 0;
+            y += 20;
+        }
+
+            // writing to file
+        if (image != null) {
+            try {
+                File outputfile = new File("image.png");
+                ImageIO.write(image, "png", outputfile);
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
         }
     }
 
@@ -184,6 +227,8 @@ public class Screen extends JPanel implements MouseListener, ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == clearButton) {
             clearScreen();
+        } else if (e.getSource() == saveButton) {
+            saveImage();
         }
     }
 }
