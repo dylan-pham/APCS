@@ -5,18 +5,44 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseEvent;
+import javax.swing.JButton;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
  
-public class Screen extends JPanel implements MouseListener {
+public class Screen extends JPanel implements MouseListener, ActionListener {
     private Square[][] grid;
+    private ColorPalette[][] selector;
+    private JButton clearButton;
+    private int red;
+    private int green;
+    private int blue;
 
     public Screen() {
+        setLayout(null);
         grid = new Square[8][8];
+        selector = new ColorPalette[6][1];
 
         for (int r = 0; r < grid.length; r++) {
             for (int c = 0; c < grid[r].length; c++) {
                 grid[r][c] = new Square(255, 255, 255);
             }
         }
+
+        selector[0][0] = new ColorPalette(255, 0, 0);
+        selector[1][0] = new ColorPalette(0, 255, 0);
+        selector[2][0] = new ColorPalette(0, 0, 255);
+        selector[3][0] = new ColorPalette(255, 255, 0);
+        selector[4][0] = new ColorPalette(128, 0, 128);
+        selector[5][0] = new ColorPalette(255, 165, 0);
+
+        clearButton = new JButton("Clear");
+        clearButton.setBounds(700, 10, 90, 30);
+        clearButton.addActionListener(this);
+        this.add(clearButton);
+
+        red = 0;
+        green = 255;
+        blue = 0;
 
         addMouseListener(this);
     }
@@ -37,6 +63,13 @@ public class Screen extends JPanel implements MouseListener {
                 x += 20;
             }
             x = 10;
+            y += 20;
+        }
+
+        x = 200;
+        y = 10;
+        for (int r = 0; r < selector.length; r++) {
+            selector[r][0].drawMe(g, x, y);
             y += 20;
         }
     }
@@ -98,9 +131,46 @@ public class Screen extends JPanel implements MouseListener {
         }
 
         if (row != -1 && column != -1) {
-            grid[row][column].changeColor(0, 255, 0);
+            grid[row][column].changeColor(red, green, blue);
             repaint();
         }
+
+        if (e.getX() > 200 && e.getX() < 220 && e.getY() > 10 && e.getY() < 30) {
+            red = 255;
+            green = 0;
+            blue = 0;
+        } else if (e.getX() > 200 && e.getX() < 220 && e.getY() > 30 && e.getY() < 50) {
+            red = 0;
+            green = 255;
+            blue = 0;
+        } else if (e.getX() > 200 && e.getX() < 220 && e.getY() > 50 && e.getY() < 70) {
+            red = 0;
+            green = 0;
+            blue = 255;
+        } else if (e.getX() > 200 && e.getX() < 220 && e.getY() > 70 && e.getY() < 90) {
+            red = 255;
+            green = 255;
+            blue = 0;
+        } else if (e.getX() > 200 && e.getX() < 220 && e.getY() > 90 && e.getY() < 110) {
+            red = 128;
+            green = 0;
+            blue = 128;
+        } else if (e.getX() > 200 && e.getX() < 220 && e.getY() > 110 && e.getY() < 130) {
+            red = 255;
+            green = 165;
+            blue = 0;
+        }
+
+    }
+
+    private void clearScreen() {
+        for (int r = 0; r < grid.length; r++) {
+            for (int c = 0; c < grid[r].length; c++) {
+                grid[r][c].changeColor(255, 255, 255);
+            }
+        }
+
+        repaint();
     }
 
     public void mouseReleased(MouseEvent e) {}
@@ -110,4 +180,10 @@ public class Screen extends JPanel implements MouseListener {
     public void mouseExited(MouseEvent e) {}
  
     public void mouseClicked(MouseEvent e) {}
+
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == clearButton) {
+            clearScreen();
+        }
+    }
 }
