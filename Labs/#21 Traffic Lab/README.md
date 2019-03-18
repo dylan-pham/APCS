@@ -1,0 +1,1 @@
+Have a traffic light in which the cars must stop when they reach the traffic light if it is red. It moves when it is green.  

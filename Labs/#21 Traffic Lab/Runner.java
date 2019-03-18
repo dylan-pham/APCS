@@ -9,6 +9,7 @@ public class Runner {
         fr.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         fr.pack();
         fr.setVisible(true);
- 
+        
+        sc.animate();
     }
 }
